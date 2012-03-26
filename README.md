@@ -3,6 +3,8 @@ Mirror
 
 Experimenting with P2P Audio/Video, using Node.js, HTML5 Canvas, SoundManager
 
+Demo: [http://mirror.nodejitsu.com/](http://mirror.nodejitsu.com/)
+
 Requirements
 ------------
 
