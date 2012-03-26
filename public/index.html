@@ -18,11 +18,16 @@
 	<div id="wrapper">
 		<h1>Mirror</h1>
 		<p>Through the looking glass</p>
-		<button id="save">Save Screenshot</button><br />
-		<button id="capture">Capture</button><br />
-		<canvas id="canvas" width="320" height="240"></canvas>
+		<button id="save">Save Screenshot</button>
+		<button id="broadcast">Broadcast</button><br />
 		<div id="webcam"></div>
-		<div class="clearer"></div>
+		<hr />
+		<div id="players">
+			<ul>
+				<li><canvas id="canvas" width="320" height="240"></canvas></li>
+			</ul>
+			<div class="clearer"></div>
+		</div>
 		<div id="debug">
 			<div id="status"></div>
 			<div id="clientId"></div>
