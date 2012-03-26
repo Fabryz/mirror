@@ -188,7 +188,7 @@ $(document).ready(function() {
 		newPlayer.color = data.player.color;
 
 		players.push(newPlayer);
-		log('New player joined: '+ newPlayer.nick);
+		log('New player joined: '+ newPlayer.nick +' ('+ players.length +' total)');
 		newPlayer = {};
 	});
 
