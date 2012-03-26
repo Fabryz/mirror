@@ -18,7 +18,7 @@ Installation
 ----------
 
 1. Clone the repository with ``git clone git://github.com/Fabryz/mirror.git YOUR_PROJECT_NAME``
-2. Install dependencies with ``npm install``
+2. Install dependencies with ``npm install`` and ``git submodule init && git submodule update``
 3. Start the server with ``node server.js``
 4. Point your browser to ``YOUR_SERVER_IP:8080``
 5. Touch your nose, do a backflip
