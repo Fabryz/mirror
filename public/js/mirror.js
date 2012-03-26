@@ -98,7 +98,7 @@ $(document).ready(function() {
 			window.location = screen;
 		});
 
-		$("#capture").click(function() {
+		$("#broadcast").click(function() {
 			webcam.capture();
 		});
 	}
@@ -191,6 +191,15 @@ $(document).ready(function() {
 
 		players.push(newPlayer);
 		log('New player joined: '+ newPlayer.nick +' ('+ players.length +' total)');
+
+		//FIXME li
+
+		$("<canvas/>", {
+			"width": canvasWidth,
+			"height": canvasHeight,
+			"data-id": newPlayer.id
+		}).appendTo("<li/>").appendTo("#players ul");
+
 		newPlayer = {};
 	});
 
