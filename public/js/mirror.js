@@ -59,7 +59,7 @@ $(document).ready(function() {
 			onSave: function(data) {
 
 				socket.emit("screen", { screen: data });
-				log("Screen sent.");
+				//log("Screen sent.");
 			},
 			onCapture: function() {
 				webcam.save();
@@ -100,8 +100,6 @@ $(document).ready(function() {
 
 		$("#capture").click(function() {
 			webcam.capture();
-
-			log("clicked capture");
 		});
 	}
 
@@ -126,6 +124,9 @@ $(document).ready(function() {
 		pos = 0,
 		image = null;
 
+	var player = new Player(),
+		players = [];
+
 	log(canvasWidth +"x"+ canvasHeight +" Canvas ready.");
 	init();
 	
@@ -145,16 +146,93 @@ $(document).ready(function() {
 	
 	socket.on('clientId', function(data) {
     	clientId.html(data.id);
+    	log('Received current player id: '+ data.id);
 	});
 	
 	socket.on('tot', function(data) {	
 		tot.html(data.tot);
 	});
 
+	socket.on('join', function(data) {
+		//var player = jQuery.extend(true, {}, data);
+		player.id = data.player.id;
+		player.nick = data.player.nick;
+		player.lastMoveTime = data.player.lastMoveTime;
+		player.ping = data.player.ping;
+		player.color = data.player.color;
+
+		log('You have joined the server.');
+	});
+
+	socket.on('quit', function(data) {
+		var quitter = '';
+
+		var length = players.length;
+		for(var i = 0; i < length; i++) {
+			if (players[i].id == data.id) {
+				quitter = players[i].nick;
+				players.splice(i, 1);
+				break;
+			}
+		}
+
+		log('Player quitted: '+ quitter +' (id '+ data.id +')');
+	});
+
+	socket.on('newplayer', function(data) {
+		var newPlayer = new Player();
+		newPlayer.id = data.player.id;
+		newPlayer.nick = data.player.nick;
+		newPlayer.lastMoveTime = data.player.lastMoveTime;
+		newPlayer.ping = data.player.ping;
+		newPlayer.color = data.player.color;
+
+		players.push(newPlayer);
+		log('New player joined: '+ newPlayer.nick);
+		newPlayer = {};
+	});
+
+	socket.on('playerlist', function(data) {
+		players = []; //prepare for new list
+
+		var length = data.list.length;
+		for(var i = 0; i < length; i++) {
+			var tmpPlayer = new Player();
+			tmpPlayer.id = data.list[i].id;
+			tmpPlayer.nick = data.list[i].nick;
+			tmpPlayer.lastMoveTime = data.list[i].lastMoveTime;
+			tmpPlayer.ping = data.list[i].ping;
+			tmpPlayer.color = data.list[i].color;
+
+			players.push(tmpPlayer);
+			tmpPlayer = {};
+		}
+
+		log('Initial player list received: '+ length +' players.');
+	});
+
+	socket.on('ping', function(data) {
+		socket.emit('pong', { time: Date.now() });
+		//log('Ping? Pong!');
+	});
+
+	socket.on('pingupdate', function(data) {
+		var length = players.length;
+		for(var i = 0; i < length; i++) {
+			if (players[i].id == data.id) {
+				players[i].ping = data.ping;
+				if (player.id == data.id) {
+					player.ping = data.ping;
+					//$("#ping").html(player.ping +'ms');
+				}
+				break;
+			}
+		}
+	});
+
 	socket.on('screen', function(data) {	
-		log("Screen received");
+		//log("Screen received");
 
 		renderData(data.screen);
-
 	});
 });
