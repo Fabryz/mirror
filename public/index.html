@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+	
+    <title>Mirror</title>
+
+    <link type="text/css" rel="stylesheet" href="./css/style.css" media="screen">
+
+    <script type="text/javascript" src="./js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="./socket.io/socket.io.js"></script>
+
+    <script type="text/javascript" src="./js/jQuery-webcam/jquery.webcam.js"></script>
+    <script type="text/javascript" src="./js/mirror.js"></script>
+</head>
+<body>
+	<div id="wrapper">
+		<h1>Mirror</h1>
+		<p>Through the looking glass</p>
+		<button id="save">Save Screenshot</button><br />
+		<button id="capture">Capture</button><br />
+		<canvas id="canvas" width="320" height="240"></canvas>
+		<div id="webcam"></div>
+		<div class="clearer"></div>
+		<div id="debug">
+			<div id="status"></div>
+			<div id="clientId"></div>
+			<div id="online">There are <span id="tot">0</span> users online.</div>
+		</div>
+	</div>
+</body>
+</html>
