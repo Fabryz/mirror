@@ -154,12 +154,12 @@ $(document).ready(function() {
 	});
 
 	socket.on('join', function(data) {
-		//var player = jQuery.extend(true, {}, data);
-		player.id = data.player.id;
-		player.nick = data.player.nick;
-		player.lastMoveTime = data.player.lastMoveTime;
-		player.ping = data.player.ping;
-		player.color = data.player.color;
+		player = jQuery.extend(true, {}, data.player);
+		// player.id = data.player.id;
+		// player.nick = data.player.nick;
+		// player.lastMoveTime = data.player.lastMoveTime;
+		// player.ping = data.player.ping;
+		// player.color = data.player.color;
 
 		log('You have joined the server.');
 	});
@@ -181,11 +181,13 @@ $(document).ready(function() {
 
 	socket.on('newplayer', function(data) {
 		var newPlayer = new Player();
-		newPlayer.id = data.player.id;
-		newPlayer.nick = data.player.nick;
-		newPlayer.lastMoveTime = data.player.lastMoveTime;
-		newPlayer.ping = data.player.ping;
-		newPlayer.color = data.player.color;
+		newPlayer = jQuery.extend(true, {}, data.player);
+
+		// newPlayer.id = data.player.id;
+		// newPlayer.nick = data.player.nick;
+		// newPlayer.lastMoveTime = data.player.lastMoveTime;
+		// newPlayer.ping = data.player.ping;
+		// newPlayer.color = data.player.color;
 
 		players.push(newPlayer);
 		log('New player joined: '+ newPlayer.nick +' ('+ players.length +' total)');
@@ -198,11 +200,14 @@ $(document).ready(function() {
 		var length = data.list.length;
 		for(var i = 0; i < length; i++) {
 			var tmpPlayer = new Player();
-			tmpPlayer.id = data.list[i].id;
-			tmpPlayer.nick = data.list[i].nick;
-			tmpPlayer.lastMoveTime = data.list[i].lastMoveTime;
-			tmpPlayer.ping = data.list[i].ping;
-			tmpPlayer.color = data.list[i].color;
+
+			tmpPlayer = jQuery.extend(true, {}, data.list[i]);
+
+			// tmpPlayer.id = data.list[i].id;
+			// tmpPlayer.nick = data.list[i].nick;
+			// tmpPlayer.lastMoveTime = data.list[i].lastMoveTime;
+			// tmpPlayer.ping = data.list[i].ping;
+			// tmpPlayer.color = data.list[i].color;
 
 			players.push(tmpPlayer);
 			tmpPlayer = {};
