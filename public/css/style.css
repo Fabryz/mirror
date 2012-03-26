@@ -33,13 +33,30 @@ a {
 }
 
 #webcam {
-	float: left;
 	width: 320px;
 	height: 240px;
 	background-color: #333;
 }
 
-#canvas {
+canvas {
 	float: left;
+	width: 320px;
+	height: 240px;
 	background-color: #CCC;
+}
+
+#players {
+
+}
+
+#players ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+#players ul li {
+	float: left;
+	width: 320px;
+	margin-right: 10px;
 }
