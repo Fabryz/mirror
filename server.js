@@ -54,6 +54,10 @@ io.sockets.on('connection', function(client) {
 	client.emit("clientId", { id: client.id });
 	io.sockets.emit("tot", { tot: totUsers });
 
+	client.on("screen", function(data) {
+		io.sockets.emit("screen", { screen: data.screen });
+	});
+
 	client.on('disconnect', function() {
 		totUsers--;
 		console.log('- User '+ client.id +' disconnected, total users: '+ totUsers);
