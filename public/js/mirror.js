@@ -222,6 +222,11 @@ $(document).ready(function() {
 			// tmpPlayer.color = data.list[i].color;
 
 			players.push(tmpPlayer);
+
+			if (tmpPlayer.id != player.id) {
+				appendCanvas(tmpPlayer.id);
+			}
+
 			tmpPlayer = {};
 		}
 
