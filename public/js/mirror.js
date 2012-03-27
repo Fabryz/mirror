@@ -259,6 +259,6 @@ $(document).ready(function() {
 	socket.on('screen', function(data) {	
 		//log("Screen received");
 
-		renderData(id, data.screen);
+		renderData(data.id, data.screen);
 	});
 });
