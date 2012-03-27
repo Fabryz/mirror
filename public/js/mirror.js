@@ -20,9 +20,9 @@ $(document).ready(function() {
 		}
 	}
 
-	function renderData(data) {
-		var col = data.split(";");
-		var img = image;
+	function renderData(id, data) {
+		var col = data.split(";"),
+			img = image;
 
 		for (var i = 0; i < canvasWidth; i++) {
 			var tmp = parseInt(col[i]);
@@ -33,8 +33,13 @@ $(document).ready(function() {
 			pos+= 4;
 		}
 
-		if (pos >= 4 * canvasWidth * canvasHeight) {
-			ctx.putImageData(img, 0, 0);
+		if ( pos >= 4 * canvasWidth * canvasHeight) {
+			if (id == player.id) {
+				ctx.putImageData(img, 0, 0);
+			} else {
+				var tmp_ctx = $("#players ul").find("[data-id='" + id +"']").get(0).getContext("2d"); //FIXME
+				tmp_ctx.putImageData(img, 0, 0);
+			}
 			pos = 0;
 		}
 	}
@@ -65,8 +70,7 @@ $(document).ready(function() {
 
 			},
 			onSave: function(data) {
-
-				socket.emit("screen", { screen: data });
+				socket.emit("screen", { id: player.id, screen: data });
 				//log("Screen sent.");
 			},
 			onCapture: function() {
@@ -255,6 +259,6 @@ $(document).ready(function() {
 	socket.on('screen', function(data) {	
 		//log("Screen received");
 
-		renderData(data.screen);
+		renderData(id, data.screen);
 	});
 });
