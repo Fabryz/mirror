@@ -39,6 +39,14 @@ $(document).ready(function() {
 		}
 	}
 
+	function appendCanvas(id) {
+		$("#players ul").append('<li><canvas data-id="'+ id +'" width ="'+ canvasWidth +'" height="'+ canvasHeight +'"></canvas></li>');
+	}
+
+	function removeCanvas(id) {
+		$("#players ul").find("[data-id='" + id +"']").parent().remove();
+	}
+
 	function init() {
 		ctx.fillStyle = 'rgb(0, 0, 0)';
 		ctx.font = "15px Monospace";
@@ -171,6 +179,7 @@ $(document).ready(function() {
 		for(var i = 0; i < length; i++) {
 			if (players[i].id == data.id) {
 				quitter = players[i].nick;
+				removeCanvas(players[i].id);
 				players.splice(i, 1);
 				break;
 			}
@@ -192,14 +201,8 @@ $(document).ready(function() {
 		players.push(newPlayer);
 		log('New player joined: '+ newPlayer.nick +' ('+ players.length +' total)');
 
-		//FIXME li
-
-		$("<canvas/>", {
-			"width": canvasWidth,
-			"height": canvasHeight,
-			"data-id": newPlayer.id
-		}).appendTo("<li/>").appendTo("#players ul");
-
+		appendCanvas(newPlayer.id);
+		
 		newPlayer = {};
 	});
 
