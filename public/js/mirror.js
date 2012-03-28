@@ -45,7 +45,15 @@ $(document).ready(function() {
 	}
 
 	function appendCanvas(id) {
-		$("#players ul").append('<li><canvas data-id="'+ id +'" width ="'+ canvasWidth +'" height="'+ canvasHeight +'"></canvas></li>');
+		$("#players ul").append(
+			$("<li>").append(
+				$("<canvas/>", {
+					"data-id": id,
+					"width": canvasWidth,
+					"height": canvasHeight
+				})
+			)
+		);
 	}
 
 	function removeCanvas(id) {
