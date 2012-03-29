@@ -103,7 +103,7 @@ $(document).ready(function() {
 		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
 		var temp_img = new Image();
-		temp_img.src = "http://www.w3.org/html/logo/downloads/HTML5_Logo_64.png";
+		temp_img.src = "../img/HTML5_Logo_64.png";
 		temp_img.onload = function() {
 			ctx.drawImage(temp_img, canvasWidth / 2 - temp_img.width / 2, canvasHeight / 2 - temp_img.height / 2);
 		}
@@ -116,8 +116,9 @@ $(document).ready(function() {
 		});
 
 		$("#save").click(function() {
-			var screen = canvas.get(0).toDataURL("image/png");
-			window.location = screen;
+			var screenshot = canvas.get(0).toDataURL("image/png");
+
+			window.open(screenshot, "Screenshot", "width="+ canvasWidth +", height="+ canvasHeight);
 		});
 
 		$("#broadcast").click(function() {
