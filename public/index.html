@@ -18,9 +18,27 @@
 	<div id="wrapper">
 		<h1>Mirror</h1>
 		<p>Through the looking glass</p>
-		<button id="save">Save Screenshot</button>
+		<button id="save">Screenshot</button>
 		<button id="broadcast">Broadcast</button><br />
 		<div id="webcam"></div>
+		<div id="chat-wrapper">
+			<div id="upper">
+				<div id="chatLog">
+					<ul></ul>
+				</div>
+				<div id="playerlist">
+					<ul></ul>
+				</div>
+				<div class="clearer"></div>
+			</div>
+			<input type="text" value="" id="chatMsg" name="chatMsg" maxlength="255" />
+			<div id="lower">
+				You are talking to:
+				<strong><span id="selected">broadcast</span></strong>
+				<a id="talkto" href="#" title="Talk to everyone">broadcast</a>
+			</div>
+		</div>
+		<div class="clearer"></div>
 		<hr />
 		<div id="players">
 			<ul>

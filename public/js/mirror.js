@@ -62,6 +62,28 @@ $(document).ready(function() {
 		$("#players ul").find("[data-id='" + id +"']").parent().remove();
 	}
 
+	function appendPlayerList(id, nick) {
+
+		var newLi = $("<li/>").append($("<a/>", {
+			"class": "nick",
+			"href": "#",
+			"title": "Send a PM to: "+ nick,
+			"data-id": id
+		}).html(nick));
+
+		playerlist.append(newLi);
+
+		$(newLi).find("a").bind("click", function() {
+			selected.empty();
+			selected.html($(this).data("id")); // FIXME Something is wrong here.
+			chatMsg.focus();
+		});
+	}
+
+	function removePlayerList(id) {
+		playerlist.find("[data-id='" + id +"']").parent().remove();
+	}
+
 	function init() {
 		ctx.fillStyle = 'rgb(0, 0, 0)';
 		ctx.font = "15px Monospace";
@@ -124,6 +146,24 @@ $(document).ready(function() {
 		$("#broadcast").click(function() {
 			webcam.capture();
 		});
+
+		chatMsg.focus();
+
+		chatMsg.keydown(function(e) {
+			if (e.keyCode === 13) { // enter
+				if (selected.text() == "broadcast") {
+					socket.emit("chat", { msg: chatMsg.val() });
+				} else {
+					socket.emit("private", { msg: chatMsg.val(), to: selected.text() });
+				}
+				chatMsg.val('');
+			}
+		});
+
+		talkto.bind("click", function() {
+			selected.html('broadcast');
+			chatMsg.focus();
+		});
 	}
 
 	/*
@@ -149,6 +189,12 @@ $(document).ready(function() {
 
 	var player = new Player(),
 		players = [];
+
+	var chatLog = $("#chatLog ul"),
+		playerlist = $("#playerlist ul"),
+		chatMsg = $("#chatMsg"),
+		selected = $("#selected"),
+		talkto = $("#talkto");
 
 	log(canvasWidth +"x"+ canvasHeight +" Canvas ready.");
 	init();
@@ -184,6 +230,8 @@ $(document).ready(function() {
 		// player.ping = data.player.ping;
 		// player.color = data.player.color;
 
+		appendPlayerList(player.id, player.nick);
+
 		log('You have joined the server.');
 	});
 
@@ -195,6 +243,10 @@ $(document).ready(function() {
 			if (players[i].id == data.id) {
 				quitter = players[i].nick;
 				removeCanvas(players[i].id);
+				removePlayerList(players[i].id);
+				if (selected.text() == players[i].id) {
+					selected.html('broadcast');
+				}
 				players.splice(i, 1);
 				break;
 			}
@@ -216,6 +268,7 @@ $(document).ready(function() {
 		players.push(newPlayer);
 		log('New player joined: '+ newPlayer.nick +' ('+ players.length +' total)');
 
+		appendPlayerList(newPlayer.id, newPlayer.nick);
 		appendCanvas(newPlayer.id);
 		
 		newPlayer = {};
@@ -271,5 +324,13 @@ $(document).ready(function() {
 		//log("Screen received");
 
 		renderData(data.id, data.screen);
+	});
+
+	socket.on("chat", function(data) {
+		chatLog.append('<li><strong>'+ data.from +'</strong>: '+ data.msg +'</li>');
+	});
+
+	socket.on("private", function(data) {
+		chatLog.append('<li class="private"><strong>'+ data.from +' -> '+ data.to +'</strong>: '+ data.msg +'</li>');
 	});
 });

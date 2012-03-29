@@ -33,9 +33,69 @@ a {
 }
 
 #webcam {
+	float: left;
 	width: 320px;
 	height: 240px;
+	margin-right: 10px;
 	background-color: #333;
+}
+
+#chat-wrapper {
+	float: left;
+	width: 700px;
+}
+
+#chat-wrapper #upper {
+	width: 100%;
+	height: 252px;
+	margin: 10px 0;
+	padding: 0;
+}
+
+#chat-wrapper #chatLog,
+#chat-wrapper #playerlist {
+	background-color: #FFFFDD;
+	height: 250px;
+	overflow: auto;
+	border: 1px solid #E3E3E3;
+}
+
+#chat-wrapper #chatLog {
+	float: left;
+	width: 60%;
+}
+
+#chat-wrapper #chatLog ul,
+#chat-wrapper #playerlist ul {
+	list-style-type: none;
+	margin: 10px 0 0 10px;
+	padding: 0;
+}
+
+#chat-wrapper #chatLog ul li,
+#chat-wrapper #playerlist ul li {
+	line-height: 1;
+	margin-bottom: 5px;
+}
+
+#chat-wrapper #playerlist {
+	float: right;
+	width: 39%;
+}
+
+#chat-wrapper #chatMsg {
+	width: 685px;
+	font-size: 16px;
+	padding: 8px 5px;
+}
+
+#chat-wrapper .private {
+	background-color: #CCC;
+	font-style: italic;
+}
+
+#chat-wrapper #lower {
+	margin-top: 5px;
 }
 
 canvas {

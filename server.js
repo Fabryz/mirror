@@ -123,6 +123,17 @@ io.sockets.on('connection', function(client) {
 		io.emit('pingupdate', { id: client.id, ping: pings[client.id].ping });
 	});
 
+	client.on("chat", function(data) {
+		//console.dir(data);
+		io.sockets.emit("chat", { from: client.id, msg: data.msg });
+	});
+
+	client.on("private", function(data) {
+		console.dir(data);
+		//io.sockets.sockets[data.to].emit("private", { from: client.id, to: data.to, msg: data.msg });
+		//client.emit("private", { from: client.id, to: data.to, msg: data.msg });
+	});
+
 	client.on('disconnect', function() {
 		var quitter = '';
 
