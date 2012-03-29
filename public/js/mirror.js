@@ -35,9 +35,11 @@ $(document).ready(function() {
 
 		if ( pos >= 4 * canvasWidth * canvasHeight) {
 			if (id == player.id) {
+				ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 				ctx.putImageData(img, 0, 0);
 			} else {
 				var tmp_ctx = $("#players ul").find("[data-id='" + id +"']").get(0).getContext("2d"); //FIXME
+				tmp_ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 				tmp_ctx.putImageData(img, 0, 0);
 			}
 			pos = 0;
