@@ -208,6 +208,7 @@ $(document).ready(function() {
 	});
 			
 	socket.on('disconnect', function() {
+		chatLog.append('<li><strong>* * * Disconnected.</strong></li>');
 		status.html("Disconnected.");
 		log("Disconnected.");
 	});
