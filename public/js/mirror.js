@@ -224,12 +224,6 @@ $(document).ready(function() {
 
 	socket.on('join', function(data) {
 		player = jQuery.extend(true, {}, data.player);
-		// player.id = data.player.id;
-		// player.nick = data.player.nick;
-		// player.lastMoveTime = data.player.lastMoveTime;
-		// player.ping = data.player.ping;
-		// player.color = data.player.color;
-
 		appendPlayerList(player.id, player.nick);
 
 		log('You have joined the server.');
@@ -258,13 +252,6 @@ $(document).ready(function() {
 	socket.on('newplayer', function(data) {
 		var newPlayer = new Player();
 		newPlayer = jQuery.extend(true, {}, data.player);
-
-		// newPlayer.id = data.player.id;
-		// newPlayer.nick = data.player.nick;
-		// newPlayer.lastMoveTime = data.player.lastMoveTime;
-		// newPlayer.ping = data.player.ping;
-		// newPlayer.color = data.player.color;
-
 		players.push(newPlayer);
 		log('New player joined: '+ newPlayer.nick +' ('+ players.length +' total)');
 
@@ -282,13 +269,6 @@ $(document).ready(function() {
 			var tmpPlayer = new Player();
 
 			tmpPlayer = jQuery.extend(true, {}, data.list[i]);
-
-			// tmpPlayer.id = data.list[i].id;
-			// tmpPlayer.nick = data.list[i].nick;
-			// tmpPlayer.lastMoveTime = data.list[i].lastMoveTime;
-			// tmpPlayer.ping = data.list[i].ping;
-			// tmpPlayer.color = data.list[i].color;
-
 			players.push(tmpPlayer);
 
 			if (tmpPlayer.id != player.id) {
