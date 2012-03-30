@@ -292,6 +292,7 @@ $(document).ready(function() {
 			players.push(tmpPlayer);
 
 			if (tmpPlayer.id != player.id) {
+				appendPlayerList(tmpPlayer.id, tmpPlayer.nick);
 				appendCanvas(tmpPlayer.id);
 			}
 
