@@ -75,7 +75,7 @@ $(document).ready(function() {
 
 		$(newLi).find("a").bind("click", function() {
 			selected.empty();
-			selected.html($(this).data("id")); // FIXME Something is wrong here.
+			selected.html($(this).attr("data-id")); 
 			chatMsg.focus();
 		});
 	}
@@ -85,13 +85,13 @@ $(document).ready(function() {
 	}
 
 	function init() {
+		log(canvasWidth +"x"+ canvasHeight +" Canvas ready.");
+
 		ctx.fillStyle = 'rgb(0, 0, 0)';
 		ctx.font = "15px Monospace";
 			
 		status.html("Connecting...");
 		log("Connecting...");
-
-		//ctx.fillText("Canvas ready.", 10, 20);
 
 		webcam_handle.webcam({
 			width: canvasWidth,
@@ -196,7 +196,6 @@ $(document).ready(function() {
 		selected = $("#selected"),
 		talkto = $("#talkto");
 
-	log(canvasWidth +"x"+ canvasHeight +" Canvas ready.");
 	init();
 	
 	/* 

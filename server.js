@@ -129,9 +129,9 @@ io.sockets.on('connection', function(client) {
 	});
 
 	client.on("private", function(data) {
-		console.dir(data);
-		//io.sockets.sockets[data.to].emit("private", { from: client.id, to: data.to, msg: data.msg });
-		//client.emit("private", { from: client.id, to: data.to, msg: data.msg });
+		//console.dir(data);
+		io.sockets.sockets[data.to].emit("private", { from: client.id, to: data.to, msg: data.msg });
+		client.emit("private", { from: client.id, to: data.to, msg: data.msg });
 	});
 
 	client.on('disconnect', function() {
