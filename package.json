@@ -1,13 +1,17 @@
 {
   "name": "mirror",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Fabrizio Codello",
   "engines": {
-    "node": "0.6.7"
+    "node": "0.6.x"
   },
   "private": true,
   "dependencies": {
-    "express": "2.5.6",
-    "socket.io": "0.9.2"
+    "express": "2.5.x",
+    "socket.io": "0.9.x"
+  },
+  "subdomain": "mirror",
+  "scripts": {
+    "start": "server.js"
   }
 }
