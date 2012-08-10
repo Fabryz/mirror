@@ -1,3 +1,0 @@
-[submodule "public/js/jQuery-webcam"]
-	path = public/js/jQuery-webcam
-	url = git://github.com/infusion/jQuery-webcam.git
