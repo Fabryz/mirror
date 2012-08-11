@@ -1,0 +1,2 @@
+- motion detection only checkbox
+- choose rgb color of motion detection
