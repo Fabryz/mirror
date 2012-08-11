@@ -265,7 +265,9 @@ $(document).ready(function() {
           return;
         }
 
-        socket.emit("screen", { id: player.id, screen: scanvas.toDataURL() });
+        var screen = $("#tmpImage").get(0).toDataURL();
+
+        socket.emit("screen", { id: player.id, screen: screen });
 
         setTimeout(function () {
           drawFrame();
@@ -438,7 +440,9 @@ $(document).ready(function() {
 
 		//renderData(data.id, data.screen);
 
-		$("#arrived").src = data.screen;
+		$("#arrived").attr("src", data.screen);
+
+		console.log("arrived "+ Date.now() );
 	});
 
 	socket.on("chat", function(data) {

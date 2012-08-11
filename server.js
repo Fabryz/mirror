@@ -103,6 +103,7 @@ io.sockets.on('connection', function(client) {
 	}
 
 	client.on("screen", function(data) {
+		console.log("screen "+ Data.now());
 		io.sockets.emit("screen", { id: data.id, screen: data.screen });
 	});
 
