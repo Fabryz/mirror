@@ -264,9 +264,12 @@ $(document).ready(function() {
         if (video.paused || video.ended) {
           return;
         }
+
+        socket.emit("screen", { id: player.id, screen: scanvas.toDataURL() });
+
         setTimeout(function () {
           drawFrame();
-        }, 0);
+        }, 500);
       }
 
 
@@ -433,7 +436,9 @@ $(document).ready(function() {
 	socket.on('screen', function(data) {
 		//log("Screen received");
 
-		renderData(data.id, data.screen);
+		//renderData(data.id, data.screen);
+
+		$("#arrived").src = data.screen;
 	});
 
 	socket.on("chat", function(data) {
