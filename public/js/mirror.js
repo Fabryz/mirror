@@ -153,7 +153,7 @@ $(document).ready(function() {
 
 		$("#save").on("click", function() {
             var screenshot = canvas.toDataURL("image/png");
-            window.open(screenshot, "Screenshot", "width="+ 480 +", height="+ 360);
+            window.open(screenshot, "Screenshot", "width="+ 320 +", height="+ 240);
         });
 
 		$("#flip").on("change", function() {
@@ -218,7 +218,7 @@ $(document).ready(function() {
       }
 
     function drawFrame() {
-        w = 480; h = 360;
+        w = 320; h = 240;
         
 
           if (flipX) {
@@ -267,11 +267,11 @@ $(document).ready(function() {
 
         var screen = $("#tmpImage").get(0).toDataURL();
 
-        socket.emit("screen", { id: player.id, screen: screen });
+        socket.volatile.emit("screen", { id: player.id, screen: screen });
 
         setTimeout(function () {
           drawFrame();
-        }, 500);
+        }, 1000);
       }
 
 
@@ -441,8 +441,6 @@ $(document).ready(function() {
 		//renderData(data.id, data.screen);
 
 		$("#arrived").attr("src", data.screen);
-
-		console.log("arrived "+ Date.now() );
 	});
 
 	socket.on("chat", function(data) {
