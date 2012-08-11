@@ -19,7 +19,16 @@
 		<p>Through the looking glass</p>
 		<button id="save">Screenshot</button>
 		<button id="broadcast">Broadcast</button><br />
-		<div id="webcam"></div>
+		<div id="controls">
+	        <input type="button" value="Start" id="start" class="button" >
+	        <input type="button" value="Stop" id="stop" class="button" >
+	        <input type="button" value="Capture" id="drawFrame" class="button" >
+	        <button id="save">Screenshot</button>
+	        <input type="checkbox" value="Flip" id="flip"> Flip
+	        <input type="range" value="25" step="1" min="0" max="100" id="thres"> Threshold
+    	</div>
+    	<video id="sourcevid" autoplay width="480" height="360"></video>
+		<canvas id="tmpImage" width="480" height="360"></canvas>
 		<div id="chat-wrapper">
 			<div id="upper">
 				<div id="chatLog">

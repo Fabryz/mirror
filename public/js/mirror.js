@@ -25,7 +25,7 @@ $(document).ready(function() {
 			img = image;
 
 		for (var i = 0; i < canvasWidth; i++) {
-			var tmp = parseInt(col[i]);
+			var tmp = parseInt(col[i], 10);
 			img.data[pos + 0] = (tmp >> 16) & 0xff;
 			img.data[pos + 1] = (tmp >> 8) & 0xff;
 			img.data[pos + 2] = tmp & 0xff;
@@ -49,7 +49,8 @@ $(document).ready(function() {
 	function appendCanvas(id) {
 		$("#players ul").append(
 			$("<li>").append(
-				$("<canvas/>", {
+				$("<img/>", {
+					"src": "",
 					"data-id": id,
 					"width": canvasWidth,
 					"height": canvasHeight
@@ -75,7 +76,7 @@ $(document).ready(function() {
 
 		$(newLi).find("a").bind("click", function() {
 			selected.empty();
-			selected.html($(this).attr("data-id")); 
+			selected.html($(this).attr("data-id"));
 			chatMsg.focus();
 		});
 	}
@@ -93,32 +94,7 @@ $(document).ready(function() {
 		status.html("Connecting...");
 		log("Connecting...");
 
-		webcam_handle.webcam({
-			width: canvasWidth,
-			height: canvasHeight,
-			mode: "stream",
-			swffile: "js/jQuery-webcam/jscam_canvas_only.swf",
-			onTick: function() {
-
-			},
-			onSave: function(data) {
-				socket.emit("screen", { id: player.id, screen: data });
-				//log("Screen sent.");
-			},
-			onCapture: function() {
-				webcam.save();
-			},
-			debug: function(type, string) {
-				 log(type +": "+ string);
-			},
-			onLoad: function() {
-				var cams = webcam.getCameraList();
-				for (var i in cams) {
-					log("Found camera: " + cams[i]);
-				}
-				//webcam.capture()
-			}
-		});
+		//socket.emit("screen", { id: player.id, screen: data });
 
 		//webcam_handle.attr({ width: canvasWidth, height: canvasHeight });
 
@@ -128,7 +104,7 @@ $(document).ready(function() {
 		temp_img.src = "../img/HTML5_Logo_64.png";
 		temp_img.onload = function() {
 			ctx.drawImage(temp_img, canvasWidth / 2 - temp_img.width / 2, canvasHeight / 2 - temp_img.height / 2);
-		}
+		};
 		image = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
 
 		$(document).keyup(function(e) {
@@ -137,14 +113,24 @@ $(document).ready(function() {
 			}
 		});
 
-		$("#save").click(function() {
+		$("#save").on("click", function() {
 			var screenshot = canvas.get(0).toDataURL("image/png");
 
 			window.open(screenshot, "Screenshot", "width="+ canvasWidth +", height="+ canvasHeight);
 		});
 
-		$("#broadcast").click(function() {
-			webcam.capture();
+		$("#start").on("click", function() {
+			start();
+		});
+		$("#stop").on("click", function() {
+			stop();
+		});
+		$("#drawFrame").on("click", function() {
+			drawFrame();
+		});
+
+		$("#sourcevid").on("loadedmetadata", function() {
+			ResizeCanvas();
 		});
 
 		chatMsg.focus();
@@ -163,6 +149,19 @@ $(document).ready(function() {
 		talkto.bind("click", function() {
 			selected.html('broadcast');
 			chatMsg.focus();
+		});
+
+		$("#save").on("click", function() {
+            var screenshot = canvas.toDataURL("image/png");
+            window.open(screenshot, "Screenshot", "width="+ 480 +", height="+ 360);
+        });
+
+		$("#flip").on("change", function() {
+			flipX = !flipX;
+		});
+
+		$("#thres").on("change", function() {
+			threshold = this.value;
 		});
 	}
 
@@ -183,7 +182,7 @@ $(document).ready(function() {
 		canvasWidth = canvas.width(),
 		canvasHeight = canvas.height();
 
-	var webcam_handle = $("#webcam"),
+	var webcam_handle = $("#tmpImage"),
 		pos = 0,
 		image = null;
 
@@ -196,15 +195,145 @@ $(document).ready(function() {
 		selected = $("#selected"),
 		talkto = $("#talkto");
 
+
+	var scanvas = document.getElementById("tmpImage");
+	var sctx =  scanvas.getContext('2d');
+
+    var localMediaStream = null;
+    var video = document.querySelector('video');
+
+	var prev_frame = null;
+	var threshold = 25;
+	var flipX = false;
+
+	function toGrey(frame) {
+        grayFrame = new Array (frame.data.length / 4);
+        for (i = 0; i < grayFrame.length; i++) {
+          r = frame.data[4*i+0];
+          g = frame.data[4*i+1];
+          b = frame.data[4*i+2];
+          grayFrame[i] = Math.min(0.3*r + 0.59*g + 0.11*b, 255);
+        }
+        return grayFrame;
+      }
+
+    function drawFrame() {
+        w = 480; h = 360;
+        
+
+          if (flipX) {
+            sctx.save();
+            sctx.scale(-1, 1);
+            sctx.drawImage(video, -w, 0, w, h);
+            sctx.restore();
+          } else {
+              sctx.drawImage(video, 0, 0, w, h);
+          }
+
+          
+        frame = sctx.getImageData(0, 0, w, h);
+          
+        // convert current frame to gray
+        cur_frame = toGrey(frame);
+
+        // avoid calling this the first time
+		if (prev_frame !== null) {
+          // calculate difference
+          for (i = 0; i < cur_frame.length; i++) {
+            if (Math.abs(prev_frame[i] - cur_frame[i]) > threshold) {
+              // color in pixels with high difference
+              frame.data[4*i+0] = 255;
+              frame.data[4*i+1] = 100;
+              frame.data[4*i+2] = 0;
+              frame.data[4*i+3] = 255;
+            } /* else {
+              frame.data[4*i+0] = 0;
+              frame.data[4*i+1] = 0;
+              frame.data[4*i+2] = 0;
+              frame.data[4*i+3] = 0;
+            } */
+          }
+          //console.log(JSON.stringify(frame).length);
+        }
+
+        // remember current frame as previous one
+        prev_frame = cur_frame;
+          
+        sctx.putImageData(frame, 0, 0);
+              
+        if (video.paused || video.ended) {
+          return;
+        }
+        setTimeout(function () {
+          drawFrame();
+        }, 0);
+      }
+
+
+ function snapshot() {
+        if (localMediaStream) {
+            ctx.drawImage(video, 0, 0);
+            var img = document.getElementById('CaptureImage');
+            // "image/webp" works in Chrome 18. In other browsers, this will fall back to image/png.
+            img.src = canvas.toDataURL('image/webp');
+        }
+    }
+
+    function hasGetUserMedia() {
+        // Note: Opera builds are unprefixed.
+        return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia || navigator.msGetUserMedia);
+    }
+
+    function onFailSoHard(e){
+		console.log(e);
+    }
+    
+    function start() {
+        if (hasGetUserMedia()) {
+            if (navigator.webkitGetUserMedia)
+                navigator.getUserMedia = navigator.webkitGetUserMedia;
+            //var getUserMedia = navigator.webkitGetUserMedia || navigator.getUserMedia;
+
+            
+            //var gumOptions = { video: true, toString: function () { return 'video'; } };
+            if (navigator.getUserMedia) {
+                navigator.getUserMedia({ video: true, audio: true }, function (stream) {
+                    if (navigator.webkitGetUserMedia) {
+                        video.src = window.webkitURL.createObjectURL(stream);
+                    } else {
+                        video.src = stream; // Opera
+                    }
+                    localMediaStream = stream;
+                }, onFailSoHard);
+            } else {
+                video.src = 'somevideo.webm'; // fallback.
+            }
+        } else {
+            alert("Your browser does not support getusermedia");
+        }
+    }
+
+    function stop() {
+        video = document.getElementById('sourcevid');
+        video.src = "";
+    }
+
+    function ResizeCanvas() {
+        scanvas.height = video.videoHeight;
+        scanvas.width = video.videoWidth;
+    }
+
+
 	init();
 	
-	/* 
+	/*
 	* Socket.io
 	*/
-	    
+
     socket.on('connect', function() {
-    	status.html("Connected.");
-    	log("Connected.");
+		status.html("Connected.");
+		log("Connected.");
 	});
 			
 	socket.on('disconnect', function() {
@@ -214,11 +343,11 @@ $(document).ready(function() {
 	});
 	
 	socket.on('clientId', function(data) {
-    	clientId.html(data.id);
-    	log('Received current player id: '+ data.id);
+		clientId.html(data.id);
+		log('Received current player id: '+ data.id);
 	});
 	
-	socket.on('tot', function(data) {	
+	socket.on('tot', function(data) {
 		tot.html(data.tot);
 	});
 
@@ -301,7 +430,7 @@ $(document).ready(function() {
 		}
 	});
 
-	socket.on('screen', function(data) {	
+	socket.on('screen', function(data) {
 		//log("Screen received");
 
 		renderData(data.id, data.screen);
