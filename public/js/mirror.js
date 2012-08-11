@@ -267,7 +267,7 @@ $(document).ready(function() {
 
         var screen = $("#tmpImage").get(0).toDataURL();
 
-        socket.volatile.emit("screen", { id: player.id, screen: screen });
+        socket.emit("screen", { id: player.id, screen: screen });
 
         setTimeout(function () {
           drawFrame();

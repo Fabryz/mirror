@@ -103,7 +103,7 @@ io.sockets.on('connection', function(client) {
 	}
 
 	client.on("screen", function(data) {
-		io.sockets.emit("screen", { id: data.id, screen: data.screen });
+		io.sockets.volatile.emit("screen", { id: data.id, screen: data.screen });
 	});
 
 	client.on('pong', function(data) {
